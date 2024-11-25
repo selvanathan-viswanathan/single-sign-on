@@ -1,0 +1,11 @@
+#########################
+# Folders to be ignored #
+#########################
+.vscode
+node_modules
+dist
+
+#########################
+#  Files to be ignored  #
+#########################
+.env

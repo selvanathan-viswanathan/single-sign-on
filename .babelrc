@@ -1,0 +1,15 @@
+{
+    "plugins": [
+    ["@babel/plugin-transform-runtime", {
+      "regenerator": true
+    }]
+    ],
+    "presets": [
+      ["@babel/preset-env", {
+        "targets": {
+          "node": "20"
+        }
+      }]
+    ],
+    "sourceMaps": true
+  }
