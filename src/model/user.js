@@ -41,6 +41,10 @@ const userSchema = new mongoose.Schema({
     passwordHash: {
         type: String,
         required: true
+    },
+    roles: {
+        type: [String],
+        enum: ['super-admin', 'admin', 'user']
     }
 });
 
