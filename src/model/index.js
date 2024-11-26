@@ -1,5 +1,7 @@
 import userModel from './user';
+import clientModel from './client';
 
 export default {
-    userModel
+    userModel,
+    clientModel
 }
