@@ -8,3 +8,5 @@ export const createUser = (req, res) => {
     const user = new userModel(body);
     return res.json(user);
 }
+
+
