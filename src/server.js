@@ -1,7 +1,7 @@
 import express from 'express';
 import 'dotenv/config';
 import HttpTraceLogger from './middleware/http-trace-log';
-import {userRoute} from './route';
+import appRoutes from './route';
 const { PORT } = process.env;
 const app = express();
 
@@ -10,7 +10,7 @@ app.use(express.urlencoded({ extends: true }));
 
 app.use(HttpTraceLogger);
 
-app.use('/user', userRoute);
+app.use('/', appRoutes);
 
 app.listen(PORT, (error) => {
     if(error) {

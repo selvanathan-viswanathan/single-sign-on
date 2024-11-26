@@ -1,4 +1,5 @@
-import user from './user';
+import userModel from './user';
+
 export default {
-    userModel: user
+    userModel
 }

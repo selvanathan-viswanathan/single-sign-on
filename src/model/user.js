@@ -34,6 +34,14 @@ const userSchema = new mongoose.Schema({
         type: String,
         default: 'self'
     },
+    password: {
+        type: String,
+        required: true
+    },
+    passwordHash: {
+        type: String,
+        required: true
+    }
 });
 
 userSchema.pre('save', function preSave(next){
@@ -41,5 +49,6 @@ userSchema.pre('save', function preSave(next){
     something.updatedAt(Date.now());
     next();
 });
+const userModel = mongoose.model("userModel", userSchema);
 
-export const userModel = mongoose.model("userModel", userSchema);
+export default userModel;
