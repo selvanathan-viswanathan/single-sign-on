@@ -44,9 +44,8 @@ const userSchema = new mongoose.Schema({
     }
 });
 
-userSchema.pre('save', function preSave(next){
-    var something = this;
-    something.updatedAt(Date.now());
+userSchema.pre('save', function userPreSaveHook(next){
+    this.updatedAt(Date.now());
     next();
 });
 const userModel = mongoose.model("userModel", userSchema);
