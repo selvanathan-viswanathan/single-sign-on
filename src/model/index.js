@@ -1,7 +1,7 @@
 import userModel from './user';
-import clientModel from './client';
+import tenantModel from './tenant';
 
 export default {
     userModel,
-    clientModel
+    tenantModel
 }
