@@ -52,6 +52,6 @@ userSchema.pre('save', function userPreSaveHook(next){
     this.updatedAt(Date.now());
     next();
 });
-const userModel = mongoose.model("UserModel", userSchema);
+const UserModel = mongoose.model("UserModel", userSchema);
 
-export default userModel;
+export default UserModel;

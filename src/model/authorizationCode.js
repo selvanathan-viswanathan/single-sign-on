@@ -56,4 +56,4 @@ authorizationCodeSchema.pre('save', function authorizationCodePreSaveHook(next){
 });
 const authorizationCodeModel = mongoose.model("AuthorizationCodeModel", authorizationCodeSchema);
 
-export default authorizationCodeModel;
+export default AuthorizationCodeModel;

@@ -46,6 +46,6 @@ clientSchema.pre("save", function clientPreSaveHook(next) {
     this.clientSecret = uuidv6();
     next();
 });
-const clientModel = mongoose.model("ClientModel", clientSchema);
+const ClientModel = mongoose.model("ClientModel", clientSchema);
 
-export default clientModel;
+export default ClientModel;

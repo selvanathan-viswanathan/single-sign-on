@@ -29,6 +29,6 @@ scopeSchema.pre('save', function scopeSchemaPreSaveHook(next){
     this.updatedAt(Date.now());
     next();
 });
-const scopeSchemaModel = mongoose.model("ScopeModel", scopeSchemaSchema);
+const ScopeModel = mongoose.model("ScopeModel", scopeSchemaSchema);
 
-export default scopeSchemaModel;
+export default ScopeModel;
