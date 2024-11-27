@@ -34,7 +34,7 @@ const userSchema = new mongoose.Schema({
         type: String,
         default: 'self'
     },
-    password: {
+    passwordSalt: {
         type: String,
         required: true
     },
@@ -52,6 +52,6 @@ userSchema.pre('save', function userPreSaveHook(next){
     this.updatedAt(Date.now());
     next();
 });
-const userModel = mongoose.model("userModel", userSchema);
+const userModel = mongoose.model("UserModel", userSchema);
 
 export default userModel;
