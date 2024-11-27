@@ -1,7 +1,11 @@
-import userModel from './user';
-import tenantModel from './tenant';
+import UserModel from './user';
+import ClientModel from './client';
+import ScopeModel from './scope';
+import AuthorizationCodeModel from './authorizationCode';
 
 export default {
-    userModel,
-    tenantModel
+    UserModel,
+    ClientModel,
+    AuthorizationCodeModel,
+    ScopeModel
 }
