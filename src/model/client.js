@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import { v4 as uuidv4, v6 as uuidv6 } from 'uuid';
 
-const tenantSchema = new mongoose.Schema({
+const clientSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
@@ -13,6 +13,15 @@ const tenantSchema = new mongoose.Schema({
     clientSecret: {
         type: String,
         required: true,
+    },
+    allowedGrants: {
+        type: [String],
+    },
+    redirectUri: {
+        type: [String],
+    },
+    hostUri: {
+        type: [String],
     },
     createdAt: {
         type: Date,
@@ -32,11 +41,11 @@ const tenantSchema = new mongoose.Schema({
     }
 });
 
-tenantSchema.pre("save", function tenantPreSaveHook(next) {
+clientSchema.pre("save", function clientPreSaveHook(next) {
     this.clientId = uuidv4();
     this.clientSecret = uuidv6();
     next();
 });
-const tenantModel = mongoose.model("tenantModel", tenantSchema);
+const clientModel = mongoose.model("ClientModel", clientSchema);
 
-export default tenantModel;
+export default clientModel;
