@@ -1,7 +1,7 @@
 import models from "../model";
+const ObjectId = require("mongoose").Types.ObjectId;
 
 const { UserModel } = models;
-
 export const getExistingUser = async (req, res, next) => {
   try {
     const {
@@ -95,6 +95,36 @@ export const createUser = async (req, res) => {
     const user = new UserModel(body);
     const newUser = await user.save();
     return res.json(newUser);
+  } catch (error) {
+    console.log(error);
+    return res.json({
+      status: 500,
+      message: "Something went wrong",
+    });
+  }
+};
+
+export const getUserById = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    if (!ObjectId.isValid(userId)) {
+      return res.json({
+        status: 400,
+        message: "Invalid User Id",
+      });
+    }
+    const user = await UserModel.findById(userId);
+    if (!user) {
+      return res.json({
+        status: 404,
+        message: "User not found",
+      });
+    }
+    return res.json({
+      data: {
+        user,
+      },
+    });
   } catch (error) {
     console.log(error);
     return res.json({

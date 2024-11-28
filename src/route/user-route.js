@@ -1,6 +1,10 @@
 import express from "express";
 import { checkSchema, validationResult } from "express-validator";
-import { createUser, getExistingUser } from "../controller/user-controller";
+import {
+  createUser,
+  getExistingUser,
+  getUserById,
+} from "../controller/user-controller";
 import { userCreationValidatorSchema } from "../utilities/validator-object";
 const router = express.Router();
 
@@ -21,5 +25,6 @@ router.post(
   getExistingUser,
   createUser
 );
+router.get("/:userId", getUserById);
 
 export default router;
