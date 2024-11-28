@@ -1,8 +1,8 @@
 import express from "express";
-import { createUser } from "../controller/user-controller";
-const router = express.Router();
 import { checkSchema, validationResult } from "express-validator";
+import { createUser, getExistingUser } from "../controller/user-controller";
 import { userCreationValidatorSchema } from "../utilities/validator-object";
+const router = express.Router();
 
 router.post(
   "/",
@@ -10,12 +10,15 @@ router.post(
     checkSchema(userCreationValidatorSchema),
     (req, res, next) => {
       const errors = validationResult(req);
+      console.log(req.body);
+
       if (!errors.isEmpty()) {
-        return res.status(422).json({ errors: errors.mapped() });
+        return res.status(400).json({ errors: errors.mapped() });
       }
       next();
     },
   ],
+  getExistingUser,
   createUser
 );
 

@@ -1,7 +1,7 @@
 export var userValidatorObj = {
   username: {
     isLength: {
-      options: { min: 8 },
+      options: { min: 5 },
       errorMessage: "Invalid username",
     },
   },
