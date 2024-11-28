@@ -1,4 +1,6 @@
 import * as mongoose from 'mongoose';
+
+const { Schema } = mongoose;
 const authorizationCodeSchema = new mongoose.Schema({
     code: {
         type: String,
@@ -54,6 +56,6 @@ authorizationCodeSchema.pre('save', function authorizationCodePreSaveHook(next){
     this.updatedAt(Date.now());
     next();
 });
-const authorizationCodeModel = mongoose.model("AuthorizationCodeModel", authorizationCodeSchema);
+const AuthorizationCodeModel = mongoose.model("AuthorizationCodeModel", authorizationCodeSchema);
 
 export default AuthorizationCodeModel;

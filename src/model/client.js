@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import { v4 as uuidv4, v6 as uuidv6 } from 'uuid';
 
+const { Schema } = mongoose;
 const clientSchema = new mongoose.Schema({
     name: {
         type: String,

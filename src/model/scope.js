@@ -1,4 +1,6 @@
 import * as mongoose from 'mongoose';
+
+const { Schema } = mongoose;
 const scopeSchema = new mongoose.Schema({
     scope: {
         type: String,
@@ -29,6 +31,6 @@ scopeSchema.pre('save', function scopeSchemaPreSaveHook(next){
     this.updatedAt(Date.now());
     next();
 });
-const ScopeModel = mongoose.model("ScopeModel", scopeSchemaSchema);
+const ScopeModel = mongoose.model("ScopeModel", scopeSchema);
 
 export default ScopeModel;
