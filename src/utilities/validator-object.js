@@ -1,3 +1,6 @@
+import { check, validationResult } from "express-validator";
+import { ValidationError } from "./error-handler-util";
+
 export var userValidatorObj = {
   username: {
     isLength: {
@@ -27,3 +30,24 @@ export var userCreationValidatorSchema = {
     },
   },
 };
+
+export const clientValidatorObj = [
+  check("name").isString(),
+  check("hostUri").isString(),
+  check("allowedGrants").isArray(),
+  check("redirectUri").isArray(),
+  (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      const err = errors.mapped();
+      throw new ValidationError(
+        "Incorrect data",
+        Object.keys(err).map((errField) => ({
+          field: errField,
+          reason: err[errField]?.msg,
+        }))
+      );
+    }
+    next();
+  },
+];

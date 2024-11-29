@@ -1,5 +1,9 @@
 import models from "../model";
-import { onSuccess } from "../utilities/error-handler-util";
+import {
+  ConflictError,
+  NotFoundError,
+  onSuccess,
+} from "../utilities/error-handler-util";
 const ObjectId = require("mongoose").Types.ObjectId;
 
 const { UserModel } = models;
@@ -43,11 +47,7 @@ export const getExistingUser = async (req, res, next) => {
     next();
   } catch (error) {
     console.log(error);
-
-    return res.json({
-      status: 500,
-      message: "Something went wrong",
-    });
+    next(error);
   }
 };
 
@@ -85,10 +85,12 @@ export const createUser = async (req, res) => {
     const { body } = req;
     const { locals } = res;
     if (locals?.user) {
-      return res.json({
-        status: 429,
-        message: "Seems like user exists with the given email. Try log-in",
-      });
+      throw new ConflictError(
+        "Seems like user exists with the given email. Try log-in",
+        {
+          field: "username or email",
+        }
+      );
     }
     const user = new UserModel(body);
     const newUser = await user.save();
@@ -103,17 +105,14 @@ export const getUserById = async (req, res) => {
   try {
     const { userId } = req.params;
     if (!ObjectId.isValid(userId)) {
-      return res.json({
-        status: 400,
-        message: "Invalid User Id",
+      throw new ValidationError("Invalid User Id", {
+        field: "user Id",
+        reason: "Invalid",
       });
     }
     const user = await UserModel.findById(userId);
     if (!user) {
-      return res.json({
-        status: 404,
-        message: "User not found",
-      });
+      throw new NotFoundError("User not found");
     }
     return onSuccess(res, "Successfully fetched User Info", {
       data: {
@@ -137,8 +136,6 @@ export const updateUpartialUserById = async (req, res, next) => {
       firstName: firstName || locals?.user?.firstName,
       lastName: lastName || locals?.user?.lastName,
     };
-    console.log(payload);
-
     await UserModel.findByIdAndUpdate(userId, payload);
     return onSuccess(res, "Successfully updated User", payload);
   } catch (error) {
