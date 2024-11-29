@@ -51,3 +51,21 @@ export const clientValidatorObj = [
     next();
   },
 ];
+
+export const scopeValidatorObj = [
+  check("name").isString(),
+  (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      const err = errors.mapped();
+      throw new ValidationError(
+        "Incorrect data",
+        Object.keys(err).map((errField) => ({
+          field: errField,
+          reason: err[errField]?.msg,
+        }))
+      );
+    }
+    next();
+  },
+];

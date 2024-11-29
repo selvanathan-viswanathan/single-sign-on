@@ -13,8 +13,8 @@ const router = express.Router();
 
 router.post("", getExistingClient, clientValidatorObj, createClient);
 router.get("", getClients);
-router.get(":id", getClientById);
-router.put(":id", getExistingClient, clientValidatorObj, updateClient);
-router.delete(":id", getExistingClient, deleteClient);
+router.get("/:clientId", getClientById);
+router.put("/:clientId", getExistingClient, clientValidatorObj, updateClient);
+router.delete("/:clientId", getExistingClient, deleteClient);
 
 export default router;

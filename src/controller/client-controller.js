@@ -1,6 +1,10 @@
 import { v4 as uuidv4, v6 as uuidv6 } from "uuid";
 import models from "../model";
-import { ConflictError, onSuccess } from "../utilities/error-handler-util";
+import {
+  ConflictError,
+  NotFoundError,
+  onSuccess,
+} from "../utilities/error-handler-util";
 
 const { ClientModel } = models;
 
@@ -25,8 +29,10 @@ export const getExistingClient = async (req, res, next) => {
         name: sanitizedName,
       };
     }
-    const user = await ClientModel.findOne(query).lean();
-    res.locals.client = user;
+    const client = await ClientModel.findOne(query).lean();
+
+    res.locals.client = client;
+    console.log("Client i find api :: ", client, res.locals, query);
     next();
   } catch (error) {
     console.log(error);
@@ -50,8 +56,8 @@ export const createClient = async (req, res, next) => {
       clientId: uuidv4(),
       clientSecret: uuidv6(),
     });
-    const newUser = await client.save();
-    return onSuccess(res, "Client created successfully", newUser);
+    const newClient = await client.save();
+    return onSuccess(res, "Client created successfully", newClient);
   } catch (error) {
     next(error);
   }
@@ -71,8 +77,8 @@ export const getClients = async (req, res, next) => {
 
 export const getClientById = async (req, res, next) => {
   try {
-    const { id } = req.params;
-    const client = await getClientByIdService(id);
+    const { clientId } = req.params;
+    const client = await getClientByIdService(clientId);
     if (!client) {
       throw new NotFoundError("Client not found");
     }
@@ -85,13 +91,19 @@ export const getClientById = async (req, res, next) => {
 
 export const updateClient = async (req, res, next) => {
   try {
-    const { id } = req.params;
+    const { clientId } = req.params;
     const updateData = req.body;
     const client = res.locals?.client;
     if (!client) {
       throw new NotFoundError("Client not found");
     }
-    const updatedClient = await updateClientService(id, updateData);
+    const updatedClient = await ClientModel.findByIdAndUpdate(
+      clientId,
+      updateData,
+      {
+        new: true,
+      }
+    );
     return onSuccess(res, "Client updated successfully", updatedClient);
   } catch (error) {
     next(error);
@@ -100,8 +112,8 @@ export const updateClient = async (req, res, next) => {
 
 export const deleteClient = async (req, res, next) => {
   try {
-    const { id } = req.params;
-    const deletedClient = await deleteClientService(id);
+    const { clientId } = req.params;
+    const deletedClient = await ClientModel.findByIdAndDelete(clientId);
 
     if (!deletedClient) {
       throw new NotFoundError("Client not found");

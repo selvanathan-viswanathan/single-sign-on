@@ -40,6 +40,11 @@ const clientSchema = new mongoose.Schema({
   },
 });
 
+clientSchema.pre("save", function clientSchemaPreSaveHook(next) {
+  this.updatedAt = Date.now();
+  next();
+});
+
 const ClientModel = mongoose.model("ClientModel", clientSchema);
 
 export default ClientModel;
