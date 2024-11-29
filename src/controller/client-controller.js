@@ -78,7 +78,7 @@ export const getClients = async (req, res, next) => {
 export const getClientById = async (req, res, next) => {
   try {
     const { clientId } = req.params;
-    const client = await getClientByIdService(clientId);
+    const client = await ClientModel.findById(clientId);
     if (!client) {
       throw new NotFoundError("Client not found");
     }

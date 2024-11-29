@@ -7,6 +7,7 @@ import {
 const ObjectId = require("mongoose").Types.ObjectId;
 
 const { UserModel } = models;
+
 export const getExistingUser = async (req, res, next) => {
   try {
     const {
@@ -25,7 +26,7 @@ export const getExistingUser = async (req, res, next) => {
           reason: "Required",
         });
       }
-      if (!sanitizedUsername) {
+      if (!sanitizedEmail && !sanitizedUsername) {
         throw new ValidationError("Username is required", {
           field: "username",
           reason: "Required",
@@ -42,7 +43,7 @@ export const getExistingUser = async (req, res, next) => {
         ],
       };
     }
-    const user = await UserModel.findOne(query).lean();
+    const user = await UserModel.findOne(query);
     res.locals.user = user;
     next();
   } catch (error) {
@@ -51,7 +52,7 @@ export const getExistingUser = async (req, res, next) => {
   }
 };
 
-export const checkUsernameAvailability = async (req, res) => {
+export const checkUsernameAvailability = async (req, res, next) => {
   try {
     const {
       body: { username },
@@ -80,7 +81,7 @@ export const checkUsernameAvailability = async (req, res) => {
   }
 };
 
-export const createUser = async (req, res) => {
+export const createUser = async (req, res, next) => {
   try {
     const { body } = req;
     const { locals } = res;
@@ -101,7 +102,7 @@ export const createUser = async (req, res) => {
   }
 };
 
-export const getUserById = async (req, res) => {
+export const getUserById = async (req, res, next) => {
   try {
     const { userId } = req.params;
     if (!ObjectId.isValid(userId)) {

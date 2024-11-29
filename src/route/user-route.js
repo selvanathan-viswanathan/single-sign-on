@@ -1,5 +1,6 @@
 import express from "express";
 import { checkSchema, validationResult } from "express-validator";
+import { authorize } from "../controller/auth-controller";
 import {
   createUser,
   getExistingUser,
@@ -33,7 +34,7 @@ router
     getExistingUser,
     createUser
   )
-  .get("/:userId", getUserById)
-  .patch("/:userId", getExistingUser, updateUpartialUserById);
+  .get("/:userId", authorize, getUserById)
+  .patch("/:userId", authorize, getExistingUser, updateUpartialUserById);
 
 export default router;

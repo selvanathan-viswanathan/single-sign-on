@@ -1,4 +1,5 @@
 import express from "express";
+import { authorize } from "../controller/auth-controller";
 import {
   createClient,
   deleteClient,
@@ -11,10 +12,16 @@ import { clientValidatorObj } from "../utilities/validator-object";
 
 const router = express.Router();
 
-router.post("", getExistingClient, clientValidatorObj, createClient);
-router.get("", getClients);
-router.get("/:clientId", getClientById);
-router.put("/:clientId", getExistingClient, clientValidatorObj, updateClient);
-router.delete("/:clientId", getExistingClient, deleteClient);
+router.post("", authorize, getExistingClient, clientValidatorObj, createClient);
+router.get("", authorize, getClients);
+router.get("/:clientId", authorize, getClientById);
+router.put(
+  "/:clientId",
+  authorize,
+  getExistingClient,
+  clientValidatorObj,
+  updateClient
+);
+router.delete("/:clientId", authorize, getExistingClient, deleteClient);
 
 export default router;
