@@ -8,30 +8,37 @@ export const getExistingUser = async (req, res, next) => {
     const {
       body: { email, username },
     } = req;
-    const sanitizedEmail = email.trim().toLowerCase();
-    if (!sanitizedEmail) {
-      throw new ValidationError("Email is required", {
-        field: "email",
-        reason: "Required",
-      });
+    const { userId } = req.params;
+    let query = {
+      _id: userId,
+    };
+    const sanitizedEmail = email?.trim().toLowerCase();
+    const sanitizedUsername = username?.trim().toLowerCase();
+    if (!userId) {
+      if (!sanitizedEmail) {
+        throw new ValidationError("Email is required", {
+          field: "email",
+          reason: "Required",
+        });
+      }
+      if (!sanitizedUsername) {
+        throw new ValidationError("Username is required", {
+          field: "username",
+          reason: "Required",
+        });
+      }
+      query = {
+        $or: [
+          {
+            email: sanitizedEmail,
+          },
+          {
+            username: sanitizedUsername,
+          },
+        ],
+      };
     }
-    const sanitizedUsername = username.trim().toLowerCase();
-    if (!sanitizedUsername) {
-      throw new ValidationError("Username is required", {
-        field: "username",
-        reason: "Required",
-      });
-    }
-    const user = await UserModel.findOne({
-      $or: [
-        {
-          email: sanitizedEmail,
-        },
-        {
-          username: sanitizedUsername,
-        },
-      ],
-    });
+    const user = await UserModel.findOne(query).lean();
     res.locals.user = user;
     next();
   } catch (error) {
@@ -113,6 +120,27 @@ export const getUserById = async (req, res) => {
         user,
       },
     });
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
+export const updateUpartialUserById = async (req, res, next) => {
+  try {
+    const { params, body } = req;
+    const { userId } = params;
+    const { firstName, lastName } = body;
+    const { locals } = res;
+    const payload = {
+      ...locals.user,
+      firstName: firstName || locals?.user?.firstName,
+      lastName: lastName || locals?.user?.lastName,
+    };
+    console.log(payload);
+
+    await UserModel.findByIdAndUpdate(userId, payload);
+    return onSuccess(res, "Successfully updated User", payload);
   } catch (error) {
     console.log(error);
     next(error);

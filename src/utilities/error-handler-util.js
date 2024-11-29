@@ -10,7 +10,7 @@ export class AppError extends Error {
   constructor(message, statusCode, errorCode, details = {}) {
     super(message); // Call the parent class (Error) constructor
     this.statusCode = statusCode || 500; // Default to 500 (Internal Server Error)
-    this.errorCode = errorCode || "UNKNOWN_ERROR"; // Default error code
+    this.responseCode = errorCode || "UNKNOWN_ERROR"; // Default error code
     this.details = details; // Optional metadata for additional information
 
     // Capture the stack trace for debugging
@@ -69,7 +69,7 @@ export class InternalServerError extends AppError {
 export const onSuccess = (res, message, data = {}, statusCode = 200) => {
   res.status(statusCode).json({
     success: true,
-    errorCode: ERROR_CODES.SUCCESS,
+    responseCode: ERROR_CODES.SUCCESS,
     message,
     data,
   });
