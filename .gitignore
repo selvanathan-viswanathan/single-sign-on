@@ -4,8 +4,8 @@
 .vscode
 node_modules
 dist
-
 #########################
 #  Files to be ignored  #
 #########################
+keys/*
 .env
