@@ -1,4 +1,5 @@
 import models from "../model";
+import { onSuccess } from "../utilities/error-handler-util";
 const ObjectId = require("mongoose").Types.ObjectId;
 
 const { UserModel } = models;
@@ -9,16 +10,16 @@ export const getExistingUser = async (req, res, next) => {
     } = req;
     const sanitizedEmail = email.trim().toLowerCase();
     if (!sanitizedEmail) {
-      return res.json({
-        status: 400,
-        message: "email is empty",
+      throw new ValidationError("Email is required", {
+        field: "email",
+        reason: "Required",
       });
     }
     const sanitizedUsername = username.trim().toLowerCase();
     if (!sanitizedUsername) {
-      return res.json({
-        status: 400,
-        message: "username is empty",
+      throw new ValidationError("Username is required", {
+        field: "username",
+        reason: "Required",
       });
     }
     const user = await UserModel.findOne({
@@ -50,35 +51,25 @@ export const checkUsernameAvailability = async (req, res) => {
     } = req;
     const sanitizedUsername = username.trim().toLowerCase();
     if (!sanitizedUsername) {
-      return res.json({
-        status: 400,
-        message: "username is empty",
+      throw new ValidationError("Username is required", {
+        field: "username",
+        reason: "Required",
       });
     }
     const user = await UserModel.findOne({
       username: sanitizedUsername,
     });
     if (user) {
-      return res.json({
-        status: 429,
-        message: "Username already taken",
-        data: {
-          isAvailable: false,
-        },
+      throw new ConflictError("Username is already taken", {
+        field: "username",
       });
     }
-    return res.json({
-      message: "Username available",
-      data: {
-        isAvailable: true,
-      },
+    return onSuccess(res, "Username available", {
+      isAvailable: true,
     });
   } catch (error) {
     console.log(error);
-    return res.json({
-      status: 500,
-      message: "Something went wrong",
-    });
+    next(error);
   }
 };
 
@@ -97,10 +88,7 @@ export const createUser = async (req, res) => {
     return res.json(newUser);
   } catch (error) {
     console.log(error);
-    return res.json({
-      status: 500,
-      message: "Something went wrong",
-    });
+    next(error);
   }
 };
 
@@ -120,16 +108,13 @@ export const getUserById = async (req, res) => {
         message: "User not found",
       });
     }
-    return res.json({
+    return onSuccess(res, "Successfully fetched User Info", {
       data: {
         user,
       },
     });
   } catch (error) {
     console.log(error);
-    return res.json({
-      status: 500,
-      message: "Something went wrong",
-    });
+    next(error);
   }
 };

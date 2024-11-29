@@ -5,6 +5,7 @@ import {
   getExistingUser,
   getUserById,
 } from "../controller/user-controller";
+import { ValidationError } from "../utilities/error-handler-util";
 import { userCreationValidatorSchema } from "../utilities/validator-object";
 const router = express.Router();
 
@@ -14,10 +15,15 @@ router.post(
     checkSchema(userCreationValidatorSchema),
     (req, res, next) => {
       const errors = validationResult(req);
-      console.log(req.body);
-
       if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.mapped() });
+        const err = errors.mapped();
+        throw new ValidationError(
+          "Incorrect data",
+          Object.keys(err).map((errField) => ({
+            field: errField,
+            reason: err[errField]?.msg,
+          }))
+        );
       }
       next();
     },
