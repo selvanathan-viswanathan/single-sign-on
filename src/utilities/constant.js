@@ -27,3 +27,41 @@ export const defaultStatusCode = {
 export const ACCESS_LOG_FORMMAT = `:remote-addr - :remote-user [:date[clf]]
 ":method :url HTTP/:http-version" :status :res[content-length] "
 :referrer" ":user-agent"`;
+
+const appUrl = process.env.BASE_URL;
+export const openIDWellKnowJson = {
+  issuer: `${appUrl}`,
+  authorization_endpoint: `${appUrl}/authorize`,
+  token_endpoint: `${appUrl}/token`,
+  userinfo_endpoint: `${appUrl}/userinfo`,
+  jwks_uri: `${appUrl}/.well-known/jwks.json`,
+  registration_endpoint: `${appUrl}/register`,
+  scopes_supported: ["openid", "profile", "email", "offline_access"],
+  response_types_supported: ["code", "id_token", "token"],
+  response_modes_supported: ["query", "fragment", "form_post"],
+  grant_types_supported: [
+    "authorization_code",
+    "implicit",
+    "refresh_token",
+    "client_credentials",
+  ],
+  subject_types_supported: ["public"],
+  id_token_signing_alg_values_supported: ["RS256"],
+  code_challenge_methods_supported: ["S256"],
+  claims_supported: [
+    "sub",
+    "name",
+    "email",
+    "email_verified",
+    "picture",
+    "given_name",
+    "family_name",
+  ],
+  claim_types_supported: ["normal"],
+  token_endpoint_auth_methods_supported: [
+    "client_secret_basic",
+    "client_secret_post",
+    "private_key_jwt",
+  ],
+  request_uri_parameter_supported: true,
+};

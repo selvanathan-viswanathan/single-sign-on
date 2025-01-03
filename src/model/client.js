@@ -19,6 +19,9 @@ const clientSchema = new mongoose.Schema({
   redirectUri: {
     type: [String],
   },
+  logoutUri: {
+    type: [String],
+  },
   hostUri: {
     type: String,
   },

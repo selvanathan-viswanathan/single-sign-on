@@ -60,6 +60,12 @@ export class UnprocessableEntityError extends AppError {
   }
 }
 
+export class UnauthorisedAccessError extends AppError {
+  constructor(message = "UnAuthorised Access") {
+    super(message, 401, ERROR_CODES.INTERNAL_ERROR);
+  }
+}
+
 export class InternalServerError extends AppError {
   constructor(message = "Internal server error") {
     super(message, 500, ERROR_CODES.INTERNAL_ERROR);

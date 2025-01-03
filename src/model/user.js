@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
 import * as mongoose from "mongoose";
-import { generateToken } from "../utilities/jwt-util";
+import { jwtSign } from "../utilities/jwt-util";
 
 const { Schema } = mongoose;
 const SALT_WORK_FACTOR = Number(process.env.SALT_WORK_FACTOR);
@@ -74,7 +74,7 @@ userSchema.methods.comparePassword = function (candidatePassword) {
   return bcrypt.compare(candidatePassword, this.password);
 };
 
-userSchema.methods.generateToken = generateToken;
+userSchema.methods.jwtSign = jwtSign;
 
 const UserModel = mongoose.model("UserModel", userSchema);
 
